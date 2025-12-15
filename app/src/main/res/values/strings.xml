@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Weather App</string>
+
+    <!-- Titles Screens -->
+    <string name="search_screen_title">Weather Finder</string>
+    <string name="detail_screen_title">Detail</string>
+
+    <!-- Errors -->
+    <string name="error_connection">Ups! No internet connection, please try again later</string>
+    <string name="error_parsing">Ups! An error happened parsing the data</string>
+    <string name="error_server">Ups! An internal error server occurred, please try again later.</string>
+    <string name="error_server_limit_allowed">Ups! Daily limit exceeded.</string>
+    <string name="error_timeout">Ups! Timeout, please try again later.</string>
+    <string name="error_unknown">Ups! An unexpected error happened, please try again later.</string>
+    <string name="error_limited_points_error">Ups! Your daily points are over.</string>
+    <string name="error_unauthorized_error">Ups! Unauthorized user</string>
+    <string name="error_invalid_request_error">Ups! Invalid request happened</string>
+    <string name="error_not_found_error">Ups! Not found error happened</string>
+    <string name="search_city">Type a city</string>
+    <string name="clear_text">Clear input</string>
+    <string name="city_not_found">No results</string>
+</resources>
