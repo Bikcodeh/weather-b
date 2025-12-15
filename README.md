@@ -69,7 +69,7 @@ Se han implementado pruebas unitarias para garantizar la correcta funcionalidad 
 
 - Capa de Datos: Se testean los Repositories para verificar que manejan adecuadamente los datos provenientes de las fuentes de datos (Data Sources), incluyendo el manejo de errores y casos de éxito.
 - ViewModels: Se prueban para asegurar que los estados de la UI se actualizan correctamente en respuesta a las interacciones del usuario y los resultados de los casos de uso.
-- Mappers: 
+- Mappers: Se testean los mappers de la UI para asegurar correcto mapeo de campos null o not null para asegurar calidad de codigo y evitar posibles crashes
 
 ## 🚀 Requisitos para Compilar
 Para poder compilar y ejecutar el proyecto, necesitas lo siguiente:
