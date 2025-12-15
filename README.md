@@ -63,6 +63,15 @@ com.bikcodeh.weatherapp
 └──
 ```
 
+## 📱 App Screenshots
+
+| Splash                                                                                                                  | Search                                                                                                                  | Search Results                                                                                                                  | Detail                                                                                                                  |
+| ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| <img height="400" alt="splash" src="https://github.com/user-attachments/assets/1ec0f93b-4d74-4d9d-82ac-6d7555dcdaaa" /> | <img height="400" alt="search" src="https://github.com/user-attachments/assets/7924e2eb-030b-4f9f-af83-d9aba759fbca" /> | <img height="400" alt="search-results" src="https://github.com/user-attachments/assets/46c4f783-f0d9-4011-ae3d-fe4509c78021" /> | <img height="400" alt="detail" src="https://github.com/user-attachments/assets/7e65bb98-779d-4ee1-be6e-8438cf562a16" /> |
+
+| Search (Landscape)                                                                                                                | Detail (Landscape)                                                                                                                |
+| --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| <img height="400" alt="search-landscape" src="https://github.com/user-attachments/assets/967a6a8c-240a-4864-82df-fed2bef86b61" /> | <img height="400" alt="detail-landscape" src="https://github.com/user-attachments/assets/9c1434f1-9b5d-44e1-9061-ce2f5e917c00" /> |
 
 ## ✅ Pruebas Unitarias
 Se han implementado pruebas unitarias para garantizar la correcta funcionalidad de las partes críticas de la aplicación, enfocándose principalmente en:
