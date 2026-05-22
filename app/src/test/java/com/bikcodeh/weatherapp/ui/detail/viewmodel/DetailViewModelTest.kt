@@ -3,12 +3,11 @@ package com.bikcodeh.weatherapp.ui.detail.viewmodel
 import app.cash.turbine.test
 import com.bikcodeh.weatherapp.CoroutineRule
 import com.bikcodeh.weatherapp.TestDispatcherProvider
-import com.bikcodeh.weatherapp.data.remote.dto.CurrentWeatherDto
-import com.bikcodeh.weatherapp.data.remote.dto.DayDto
-import com.bikcodeh.weatherapp.data.remote.dto.ForecastDayDto
-import com.bikcodeh.weatherapp.data.remote.dto.ForecastDto
-import com.bikcodeh.weatherapp.data.remote.dto.ForecastResponseDto
-import com.bikcodeh.weatherapp.data.remote.dto.LocationForecastDto
+import com.bikcodeh.weatherapp.domain.model.Condition
+import com.bikcodeh.weatherapp.domain.model.CurrentWeather
+import com.bikcodeh.weatherapp.domain.model.ForecastDay
+import com.bikcodeh.weatherapp.domain.model.Location
+import com.bikcodeh.weatherapp.domain.model.WeatherForecast
 import com.bikcodeh.weatherapp.domain.repository.WeatherRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -51,13 +50,13 @@ class DetailViewModelTest {
     @Test
     fun `load weather updates state on success`() = runTest {
         // GIVEN
-        val forecast = ForecastResponseDto(
-            location = LocationForecastDto(
+        val forecast = WeatherForecast(
+            location = Location(
                 country = "Palestinian Territories",
                 name = "Carter Hickman",
                 region = "vituperata"
             ),
-            current = CurrentWeatherDto(
+            current = CurrentWeather(
                 tempC = 10.11,
                 feelslikeC = 12.13,
                 humidity = 3047,
@@ -65,21 +64,21 @@ class DetailViewModelTest {
                 windDir = "delenit",
                 precipMm = 16.17,
                 visKm = 18.19,
-                condition = null
+                condition = Condition("Clear", "icon")
             ),
-            forecast = ForecastDto(
-                forecastday = listOf(
-                    ForecastDayDto(
-                        date = "intellegat",
-                        day = DayDto(maxtempC = 24.25, mintempC = 26.27, condition = null)
-                    )
+            forecast = listOf(
+                ForecastDay(
+                    date = "intellegat",
+                    maxTempC = 24.25,
+                    minTempC = 26.27,
+                    condition = Condition("Sunny", "icon")
                 )
             )
         )
         val result = Result.success(forecast)
 
         coEvery {
-            weatherRepository.getForecast("Bogota", "2")
+            weatherRepository.getForecast("Bogota", "3")
         } returns result
 
         // WHEN
@@ -97,7 +96,7 @@ class DetailViewModelTest {
     fun `load weather emits error effect on failure`() = runTest {
         // GIVEN
         coEvery {
-            weatherRepository.getForecast("Bogota", "2")
+            weatherRepository.getForecast("Bogota", "3")
         } returns Result.failure(IOException("No internet"))
 
         // WHEN / THEN
@@ -123,6 +122,4 @@ class DetailViewModelTest {
             assertThat(effect).isEqualTo(DetailEffect.NavigateBack)
         }
     }
-
-
 }

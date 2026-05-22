@@ -1,13 +1,13 @@
 package com.bikcodeh.weatherapp.ui.mapper
 
-import com.bikcodeh.weatherapp.data.remote.dto.ForecastDayDto
+import com.bikcodeh.weatherapp.domain.model.ForecastDay
 import com.bikcodeh.weatherapp.ui.model.ForecastDayUiModel
 
-fun ForecastDayDto.toUiModel(): ForecastDayUiModel =
+fun ForecastDay.toUiModel(): ForecastDayUiModel =
     ForecastDayUiModel(
         date = date,
-        maxTemperatureCelsius = day.maxtempC,
-        minTemperatureCelsius = day.mintempC,
-        weatherIcon = day.condition?.icon?.let { "https:$it" },
-        condition = day.condition?.text
+        maxTemperatureCelsius = maxTempC,
+        minTemperatureCelsius = minTempC,
+        weatherIcon = "https:${condition.icon}",
+        condition = condition.text
     )

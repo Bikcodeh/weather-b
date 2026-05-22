@@ -3,8 +3,8 @@ package com.bikcodeh.weatherapp.ui.search.viewmodel
 import app.cash.turbine.test
 import com.bikcodeh.weatherapp.CoroutineRule
 import com.bikcodeh.weatherapp.TestDispatcherProvider
-import com.bikcodeh.weatherapp.data.remote.dto.LocationDto
 import com.bikcodeh.weatherapp.domain.commons.DispatcherProvider
+import com.bikcodeh.weatherapp.domain.model.Location
 import com.bikcodeh.weatherapp.domain.repository.WeatherRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -64,7 +64,7 @@ class SearchViewModelTest {
 
     @Test
     fun `search success updates locations`() = runTest {
-        val dto = LocationDto(
+        val domainModel = Location(
             id = 1,
             name = "Bogotá",
             country = "Colombia",
@@ -72,7 +72,7 @@ class SearchViewModelTest {
         )
 
         coEvery { repository.getSearch("Bog") } returns Result.success(
-            listOf(dto, dto.copy(id = 2))
+            listOf(domainModel, domainModel.copy(id = 2))
         )
 
         viewModel.sendEvent(SearchEvent.OnQueryChanged("Bog"))
