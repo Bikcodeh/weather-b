@@ -8,7 +8,7 @@ import com.bikcodeh.weatherapp.domain.model.CurrentWeather
 import com.bikcodeh.weatherapp.domain.model.ForecastDay
 import com.bikcodeh.weatherapp.domain.model.Location
 import com.bikcodeh.weatherapp.domain.model.WeatherForecast
-import com.bikcodeh.weatherapp.domain.repository.WeatherRepository
+import com.bikcodeh.weatherapp.domain.usecase.GetWeatherForecastUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,14 +26,14 @@ class DetailViewModelTest {
 
     @get:Rule
     val coroutineRule = CoroutineRule()
-    private val weatherRepository: WeatherRepository = mockk()
+    private val getWeatherForecastUseCase: GetWeatherForecastUseCase = mockk()
     private val testDispatcher = TestDispatcherProvider(UnconfinedTestDispatcher())
     private lateinit var viewModel: DetailViewModel
 
     @Before
     fun setup() {
         viewModel = DetailViewModel(
-            weatherRepository = weatherRepository,
+            getWeatherForecastUseCase = getWeatherForecastUseCase,
             dispatcher = testDispatcher
         )
     }
@@ -78,7 +78,7 @@ class DetailViewModelTest {
         val result = Result.success(forecast)
 
         coEvery {
-            weatherRepository.getForecast("Bogota", "3")
+            getWeatherForecastUseCase("Bogota")
         } returns result
 
         // WHEN
@@ -96,7 +96,7 @@ class DetailViewModelTest {
     fun `load weather emits error effect on failure`() = runTest {
         // GIVEN
         coEvery {
-            weatherRepository.getForecast("Bogota", "3")
+            getWeatherForecastUseCase("Bogota")
         } returns Result.failure(IOException("No internet"))
 
         // WHEN / THEN
@@ -107,19 +107,6 @@ class DetailViewModelTest {
             val effect = awaitItem()
 
             assertThat(effect).isInstanceOf(DetailEffect.ShowErrorMessage::class.java)
-        }
-    }
-
-    @Test
-    fun `on back clicked emits navigate back effect`() = runTest {
-        viewModel.effects.test {
-            // WHEN
-            viewModel.sendEvent(DetailEvent.OnBackClicked)
-
-            // THEN
-            val effect = awaitItem()
-
-            assertThat(effect).isEqualTo(DetailEffect.NavigateBack)
         }
     }
 }

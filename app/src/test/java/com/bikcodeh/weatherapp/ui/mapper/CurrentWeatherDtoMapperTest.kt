@@ -1,5 +1,6 @@
 package com.bikcodeh.weatherapp.ui.mapper
 
+import com.bikcodeh.weatherapp.data.mapper.toDomain
 import com.bikcodeh.weatherapp.data.remote.dto.ConditionDto
 import com.bikcodeh.weatherapp.data.remote.dto.CurrentWeatherDto
 import org.assertj.core.api.Assertions.assertThat
@@ -8,7 +9,7 @@ import org.junit.Test
 class CurrentWeatherDtoMapperTest {
 
     @Test
-    fun `toUiModel maps all fields correctly when dto is complete`() {
+    fun `toDomain maps current weather dto to domain model correctly`() {
         val dto = CurrentWeatherDto(
             tempC = 6.9,
             feelslikeC = 4.8,
@@ -23,22 +24,17 @@ class CurrentWeatherDtoMapperTest {
             )
         )
 
-        val result = dto.toUiModel(location = "Bogota")
+        val result = dto.toDomain()
 
-        assertThat(result.location).isEqualTo("Bogota")
-        assertThat(result.temperatureCelsius).isEqualTo(6.9)
-        assertThat(result.feelsLikeCelsius).isEqualTo(4.8)
-        assertThat(result.humidityPercentage).isEqualTo(42)
-        assertThat(result.windSpeedKph).isEqualTo(10.8)
-        assertThat(result.windDirection).isEqualTo("SSE")
-        assertThat(result.precipitationMm).isEqualTo(0.5)
-        assertThat(result.visibilityKm).isEqualTo(10)
-        assertThat(result.weatherConditionText).isEqualTo("Clear")
-        assertThat(result.weatherConditionIconUrl).isEqualTo("//icon.png")
+        assertThat(result.tempC).isEqualTo(6.9)
+        assertThat(result.feelslikeC).isEqualTo(4.8)
+        assertThat(result.humidity).isEqualTo(42L)
+        assertThat(result.condition.text).isEqualTo("Clear")
+        assertThat(result.condition.icon).isEqualTo("//icon.png")
     }
 
     @Test
-    fun `toUiModel uses default values when dto fields are null`() {
+    fun `toDomain handles null values by providing defaults`() {
         val dto = CurrentWeatherDto(
             tempC = null,
             feelslikeC = null,
@@ -50,40 +46,11 @@ class CurrentWeatherDtoMapperTest {
             condition = null
         )
 
-        val result = dto.toUiModel(location = "Medellin")
+        val result = dto.toDomain()
 
-        assertThat(result.location).isEqualTo("Medellin")
-        assertThat(result.temperatureCelsius).isEqualTo(0.0)
-        assertThat(result.feelsLikeCelsius).isEqualTo(0.0)
-        assertThat(result.humidityPercentage).isEqualTo(0)
-        assertThat(result.windSpeedKph).isEqualTo(0.0)
-        assertThat(result.windDirection).isEqualTo("")
-        assertThat(result.precipitationMm).isEqualTo(0.0)
-        assertThat(result.visibilityKm).isEqualTo(0L)
-        assertThat(result.weatherConditionText).isEqualTo("")
-        assertThat(result.weatherConditionIconUrl).isEqualTo("")
+        assertThat(result.tempC).isEqualTo(0.0)
+        assertThat(result.humidity).isEqualTo(0L)
+        assertThat(result.windDir).isEmpty()
+        assertThat(result.condition.text).isEmpty()
     }
-
-    @Test
-    fun `toUiModel uses tempC as fallback for feelsLikeCelsius`() {
-        val dto = CurrentWeatherDto(
-            tempC = 12.5,
-            feelslikeC = null,
-            humidity = 50,
-            windKph = 5.0,
-            windDir = "N",
-            precipMm = 1.0,
-            visKm = 8.0,
-            condition = ConditionDto(
-                text = "Cloudy",
-                icon = "icon"
-            )
-        )
-
-        val result = dto.toUiModel(location = "Cali")
-
-        assertThat(result.feelsLikeCelsius).isEqualTo(12.5)
-    }
-
-
 }

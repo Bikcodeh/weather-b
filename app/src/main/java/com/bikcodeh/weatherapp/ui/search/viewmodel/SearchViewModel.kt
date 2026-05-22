@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.bikcodeh.weatherapp.core.mvi.MVIViewModel
 import com.bikcodeh.weatherapp.domain.commons.DispatcherProvider
 import com.bikcodeh.weatherapp.domain.error.toFailure
-import com.bikcodeh.weatherapp.domain.repository.WeatherRepository
+import com.bikcodeh.weatherapp.domain.usecase.SearchLocationUseCase
 import com.bikcodeh.weatherapp.ui.error.toMessageRes
 import com.bikcodeh.weatherapp.ui.mapper.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val weatherRepository: WeatherRepository,
+    private val searchLocationUseCase: SearchLocationUseCase,
     private val dispatcher: DispatcherProvider
 ) : MVIViewModel<SearchState, SearchEffect, SearchEvent>(dispatcher) {
 
@@ -63,7 +63,7 @@ class SearchViewModel @Inject constructor(
 
             delay(400)
 
-            weatherRepository.getSearch(query)
+            searchLocationUseCase(query)
                 .onSuccess { data ->
                     setState {
                         copy(

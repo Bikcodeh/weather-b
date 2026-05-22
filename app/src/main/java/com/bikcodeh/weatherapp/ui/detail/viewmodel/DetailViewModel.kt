@@ -4,18 +4,17 @@ import androidx.lifecycle.viewModelScope
 import com.bikcodeh.weatherapp.core.mvi.MVIViewModel
 import com.bikcodeh.weatherapp.domain.commons.DispatcherProvider
 import com.bikcodeh.weatherapp.domain.error.toFailure
-import com.bikcodeh.weatherapp.domain.repository.WeatherRepository
+import com.bikcodeh.weatherapp.domain.usecase.GetWeatherForecastUseCase
 import com.bikcodeh.weatherapp.ui.error.toMessageRes
 import com.bikcodeh.weatherapp.ui.mapper.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val weatherRepository: WeatherRepository,
+    private val getWeatherForecastUseCase: GetWeatherForecastUseCase,
     private val dispatcher: DispatcherProvider
 ) : MVIViewModel<DetailState, DetailEffect, DetailEvent>(dispatcher) {
 
@@ -33,7 +32,7 @@ class DetailViewModel @Inject constructor(
 
             setState { copy(isLoading = true, isError = false) }
 
-            weatherRepository.getForecast(query, days = "3")
+            getWeatherForecastUseCase(query)
                 .onSuccess { response ->
                     val modelUi = response.toUiModel()
                     setState {

@@ -1,5 +1,6 @@
 package com.bikcodeh.weatherapp.ui.mapper
 
+import com.bikcodeh.weatherapp.data.mapper.toDomain
 import com.bikcodeh.weatherapp.data.remote.dto.LocationDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -7,7 +8,7 @@ import org.junit.Test
 class LocationDtoMapperTest {
 
     @Test
-    fun `toUiModel maps location dto correctly`() {
+    fun `toDomain maps location dto to domain correctly`() {
         // GIVEN
         val dto = LocationDto(
             id = 123,
@@ -16,14 +17,13 @@ class LocationDtoMapperTest {
             region = "Cundinamarca",
         )
 
-        // WHEN
-        val uiModel = dto.toUiModel()
+        // WHEN: Ahora probamos el mapeo al dominio (Capa de Data -> Dominio)
+        val domainModel = dto.toDomain()
 
         // THEN
-        assertThat(uiModel.id).isEqualTo(123)
-        assertThat(uiModel.name).isEqualTo("Bogota")
-        assertThat(uiModel.country).isEqualTo("Colombia")
-        assertThat(uiModel.region).isEqualTo("Cundinamarca")
+        assertThat(domainModel.id).isEqualTo(123)
+        assertThat(domainModel.name).isEqualTo("Bogota")
+        assertThat(domainModel.country).isEqualTo("Colombia")
+        assertThat(domainModel.region).isEqualTo("Cundinamarca")
     }
-
 }

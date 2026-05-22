@@ -5,7 +5,7 @@ import com.bikcodeh.weatherapp.CoroutineRule
 import com.bikcodeh.weatherapp.TestDispatcherProvider
 import com.bikcodeh.weatherapp.domain.commons.DispatcherProvider
 import com.bikcodeh.weatherapp.domain.model.Location
-import com.bikcodeh.weatherapp.domain.repository.WeatherRepository
+import com.bikcodeh.weatherapp.domain.usecase.SearchLocationUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,18 +24,17 @@ class SearchViewModelTest {
     @get:Rule
     val coroutineRule = CoroutineRule()
 
-    private lateinit var repository: WeatherRepository
+    private lateinit var searchLocationUseCase: SearchLocationUseCase
     private lateinit var dispatcherProvider: DispatcherProvider
     private lateinit var viewModel: SearchViewModel
 
     @Before
     fun setup() {
-
-        repository = mockk()
+        searchLocationUseCase = mockk()
         dispatcherProvider = TestDispatcherProvider(UnconfinedTestDispatcher())
 
         viewModel = SearchViewModel(
-            weatherRepository = repository,
+            searchLocationUseCase = searchLocationUseCase,
             dispatcher = dispatcherProvider
         )
     }
@@ -71,7 +70,7 @@ class SearchViewModelTest {
             region = "Cundinamarca"
         )
 
-        coEvery { repository.getSearch("Bog") } returns Result.success(
+        coEvery { searchLocationUseCase("Bog") } returns Result.success(
             listOf(domainModel, domainModel.copy(id = 2))
         )
 
@@ -92,7 +91,7 @@ class SearchViewModelTest {
     fun `search failure emits ShowErrorMessage effect`() = runTest {
         val error = RuntimeException("Network error")
 
-        coEvery { repository.getSearch("Bog") } returns Result.failure(error)
+        coEvery { searchLocationUseCase("Bog") } returns Result.failure(error)
 
         viewModel.effects.test {
             viewModel.sendEvent(SearchEvent.OnQueryChanged("Bog"))

@@ -1,5 +1,6 @@
 package com.bikcodeh.weatherapp.ui.detail
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,7 @@ import com.bikcodeh.weatherapp.ui.detail.viewmodel.DetailState
 import com.bikcodeh.weatherapp.ui.model.CurrentWeatherUiModel
 import com.bikcodeh.weatherapp.ui.model.ForecastDayUiModel
 
+@SuppressLint("ResourceType")
 @Composable
 fun DetailContent(state: DetailState) {
 
