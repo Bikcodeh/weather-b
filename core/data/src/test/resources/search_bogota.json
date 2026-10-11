@@ -1,0 +1,20 @@
+[
+  {
+    "id": 2805431,
+    "name": "Bogota",
+    "region": "Cundinamarca",
+    "country": "Colombia",
+    "lat": 4.6,
+    "lon": -74.08,
+    "url": "bogota-cundinamarca-colombia"
+  },
+  {
+    "id": 2617582,
+    "name": "Bogota",
+    "region": "New Jersey",
+    "country": "United States of America",
+    "lat": 40.88,
+    "lon": -74.03,
+    "url": "bogota-new-jersey-united-states-of-america"
+  }
+]

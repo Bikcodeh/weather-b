@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_detail_title">Detalle</string>
+    <string name="feature_detail_feels_like">Sensación térmica %1$d°</string>
+    <string name="feature_detail_high_low">Máxima %1$d°, mínima %2$d°</string>
+    <string name="feature_detail_precipitation">Precipitación</string>
+    <string name="feature_detail_humidity">Humedad</string>
+    <string name="feature_detail_wind">Viento</string>
+</resources>
