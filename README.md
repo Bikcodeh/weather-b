@@ -1,96 +1,126 @@
 # WeatherApp 🌦️
 
-WeatherApp es una aplicación para Android nativa desarrollada en Kotlin, que permite a los usuarios consultar el pronóstico del tiempo para diferentes ubicaciones. La aplicación muestra las condiciones actuales y un pronóstico para los próximos días.
+[![CI](https://github.com/Bikcodeh/weather-b/actions/workflows/ci.yml/badge.svg)](https://github.com/Bikcodeh/weather-b/actions/workflows/ci.yml)
 
-## ✨ Características Principales
+App Android nativa (Kotlin + Jetpack Compose) para buscar ciudades y consultar el clima actual y el
+pronóstico de los próximos días con [WeatherAPI.com](https://www.weatherapi.com/).
 
-- Búsqueda de Ubicaciones: Busca ciudades y ubicaciones para obtener datos meteorológicos.
-- Clima Actual: Visualiza la temperatura, condición climática (soleado, nublado, etc.), y otros detalles relevantes del día actual.
-- Pronóstico Extendido: Muestra el pronóstico del tiempo para los próximos días.
-- Interfaz Moderna: Interfaz de usuario limpia e intuitiva construida con Jetpack Compose.
+El proyecto es una **referencia de Clean Architecture modular**: capas desacopladas y verificadas por
+el compilador, MVVM con flujo de datos unidireccional, errores tipados, hilos inyectables y tests en
+todas las capas.
 
-## 🛠️ Tecnologías y Librerías Utilizadas
-Este proyecto utiliza una variedad de herramientas y librerías modernas del ecosistema de Android para asegurar un desarrollo robusto, escalable y mantenible.
+| Búsqueda | Resultados | Detalle | Detalle (es) |
+|:---:|:---:|:---:|:---:|
+| <img src="docs/images/search-idle.png" width="190" alt="Búsqueda"/> | <img src="docs/images/search-results.png" width="190" alt="Resultados"/> | <img src="docs/images/detail-en.png" width="190" alt="Detalle"/> | <img src="docs/images/detail-es.png" width="190" alt="Detalle en español"/> |
 
-### Librerías Más Importantes
-- Jetpack Compose: Utilizado para construir la interfaz de usuario de forma declarativa, moderna y nativa.
-- Kotlin Coroutines & Flow: Para gestionar operaciones asíncronas de manera eficiente, especialmente para las llamadas de red y las operaciones de base de datos.
-- Retrofit 3: Cliente HTTP para realizar las peticiones a la API del clima de forma segura y estructurada.
-- Hilt: Para la inyección de dependencias, facilitando la gestión de las mismas y mejorando la modularidad y testeabilidad del código.
-- ViewModel: Para gestionar y almacenar los datos relacionados con la UI, sobreviviendo a cambios de configuración.
-- Coil: Para la carga y caché de imágenes de forma eficiente, como los íconos del clima.
-- Moshi: Para la serialización y deserialización de objetos JSON a objetos Kotlin, integrado con Retrofit.
-- Timber: Una librería para gestionar los logs de la aplicación de una manera más inteligente y flexible.
+## ✨ Funcionalidades
+
+- Búsqueda con *debounce* que distingue ciudades homónimas (región y país).
+- Clima actual (temperatura, sensación térmica, precipitación, humedad y viento) y pronóstico.
+- Estados de carga, vacío y error con reintento.
+- Edge-to-edge, modo horizontal, accesibilidad (TalkBack) e idiomas inglés/español, incluidos los
+  textos que devuelve el API.
 
 ## 🏗️ Arquitectura
-La aplicación sigue los principios de Clean Architecture para separar las responsabilidades y desacoplar las capas del software. Esto hace que el proyecto sea más fácil de mantener, escalar y testear. La arquitectura está dividida en tres capas principales:
 
-1. Capa de Presentación (UI): Construida con Jetpack Compose. Es responsable de mostrar los datos en la pantalla y de capturar la interacción del usuario. Incluye Composables, ViewModels y estados de la UI.
-2. Capa de Dominio (Domain): Contiene la lógica de negocio central de la aplicación. Define los casos de uso (Use Cases) que orquestan el flujo de datos desde la capa de datos hacia la de presentación. Esta capa es independiente de cualquier framework.
-3. Capa de Datos (Data): Se encarga de proveer los datos a la aplicación, abstrayendo su origen (API remota, base de datos local, etc.). Implementa los Repositories definidos en la capa de dominio y utiliza Data Sources (como la API de Retrofit) para obtener la información.
+Clean Architecture + MVVM/UDF, separada en módulos por capa y por feature:
 
-## 📦 Mapa de Paquetes (Estructura del Proyecto)
+```mermaid
+graph TD
+    app[":app"] --> search[":feature:search"]
+    app --> detail[":feature:detail"]
+    app --> data[":core:data"]
+    search --> ui[":core:ui"]
+    detail --> ui
+    search --> designsystem[":core:designsystem"]
+    detail --> designsystem
+    search --> domain[":core:domain"]
+    detail --> domain
+    ui --> domain
+    data --> domain
+```
+
+| Módulo | Responsabilidad |
+|---|---|
+| `:app` | *Composition root*: `Application`, `MainActivity`, grafo de navegación y configuración (API key). |
+| `:feature:search` | Pantalla de búsqueda: UI, `SearchViewModel` y su ruta de navegación. |
+| `:feature:detail` | Pantalla de detalle: UI, `DetailViewModel` y su ruta de navegación. |
+| `:core:domain` | **Kotlin puro**: modelos, errores (`DomainError`, `DomainResult`), contrato `WeatherRepository` y casos de uso. |
+| `:core:data` | Implementación del repositorio: Retrofit, DTOs, mappers, mapeo de errores e inyección de dependencias. |
+| `:core:ui` | Utilidades de UI que conocen el dominio (mensajes de error). |
+| `:core:designsystem` | Tema, iconos y componentes Compose reutilizables. |
+| `:core:testing` | Fakes, datos de prueba y `MainDispatcherRule` compartidos por los tests. |
+| `build-logic` | Convention plugins de Gradle. |
 
 ```text
-com.bikcodeh.weatherapp
-├── core/                 
-│   ├── di/               # Modulos de HILT para proveer repositories, retrofit y dispatchers
-│   ├── dispatcher/       # Implementación concretata para proveer dispatchers para coroutines
-│   └── mvi/              # Configuración base para manejar MVI en la aplicación
-├── data/
-│   ├── remote/
-│   │   ├── api/          # Interfaces de Retrofit (ej: WeatherApi.kt)
-│   │   ├── dto/          # Data Transfer Objects (respuestas de la API)
-│   │   ├── interceptor/  # Interceptor para agregar dinamicamente el apiKey a los requests
-│   │   └── network/      # Implementación para hacer peticiones seguras
-│   └── repository/       # Implementaciones de repositorios
-│
-├── domain/
-│   ├── commons/       # Interfaz para proveer dispatchers para coroutines
-│   ├── error/         # Clases y mapper para manejar errores que puedan ocurrir
-│   └── repository/    # Abstracción de los repositories
-│
-├── ui/
-│   ├── components/    # Componentes reutilizables
-│   ├── search/        # Todo lo relacionado al screen search, componentes, viewmodel, navigation
-│   ├── detail/        # Todo lo relacionado al screen detail, componentes, viewmodel, navigation
-│   ├── theme/         # Colores, tipografía
-│   ├── error/         # Mapper para parsear los errores provenientes de la capa data para mostrarle al usuario un mensaje mas contextual
-│   ├── mapper/        # Mappers para convertir los modelos dto provenientes de data a modelos de UI para separar responsabilidades de capas
-│   ├── model/         # Modelos de UI
-│   ├── utils/         # Utilidades para usar en la UI
-│   └── navigation/    # Configuración de rutas para la navegación de la aplicación 
-└──
+Compose UI ──evento──▶ ViewModel ──▶ UseCase ──▶ WeatherRepository ──▶ WeatherApi (Retrofit)
+    ▲                      │
+    └──── StateFlow<UiState> ◀── DomainResult ◀── mapeo DTO → dominio + DomainError
 ```
 
-## 📱 App Screenshots
+Decisiones, contratos de cada capa, hilos, navegación y estrategia de testing:
+**[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
-| Splash                                                                                                                  | Search                                                                                                                  | Search Results                                                                                                                  | Detail                                                                                                                  |
-| ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| <img height="400" alt="splash" src="https://github.com/user-attachments/assets/1ec0f93b-4d74-4d9d-82ac-6d7555dcdaaa" /> | <img height="400" alt="search" src="https://github.com/user-attachments/assets/7924e2eb-030b-4f9f-af83-d9aba759fbca" /> | <img height="400" alt="search-results" src="https://github.com/user-attachments/assets/46c4f783-f0d9-4011-ae3d-fe4509c78021" /> | <img height="400" alt="detail" src="https://github.com/user-attachments/assets/7e65bb98-779d-4ee1-be6e-8438cf562a16" /> |
+## 🛠️ Stack
 
-| Search (Landscape)                                                                                                                | Detail (Landscape)                                                                                                                |
-| --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| <img height="400" alt="search-landscape" src="https://github.com/user-attachments/assets/967a6a8c-240a-4864-82df-fed2bef86b61" /> | <img height="400" alt="detail-landscape" src="https://github.com/user-attachments/assets/9c1434f1-9b5d-44e1-9061-ce2f5e917c00" /> |
+| Área | Tecnologías |
+|---|---|
+| Lenguaje | Kotlin 2.4, Coroutines + Flow |
+| UI | Jetpack Compose (BOM 2026.09), Material 3, Navigation Compose 2.10 *type-safe*, Coil 3, Lottie |
+| DI | Hilt 2.60 con KSP (sin kapt) |
+| Red | Retrofit 3, OkHttp 5, kotlinx.serialization |
+| Build | AGP 9.4 (Kotlin integrado), Gradle 9.6, *version catalog*, *convention plugins*, configuration cache |
+| Calidad | Spotless + ktlint + Compose rules, Android Lint (warnings como errores), GitHub Actions, Dependabot |
+| Tests | JUnit 4, AssertJ, Turbine, kotlinx-coroutines-test, MockWebServer, Robolectric + Compose UI Test |
 
-## ✅ Pruebas Unitarias
-Se han implementado pruebas unitarias para garantizar la correcta funcionalidad de las partes críticas de la aplicación, enfocándose principalmente en:
+## ✅ Tests
 
-- Capa de Datos: Se testean los Repositories para verificar que manejan adecuadamente los datos provenientes de las fuentes de datos (Data Sources), incluyendo el manejo de errores y casos de éxito.
-- ViewModels: Se prueban para asegurar que los estados de la UI se actualizan correctamente en respuesta a las interacciones del usuario y los resultados de los casos de uso.
-- Mappers: Se testean los mappers de la UI para asegurar correcto mapeo de campos null o not null para asegurar calidad de codigo y evitar posibles crashes
+| Capa | Qué se verifica | Cómo |
+|---|---|---|
+| Dominio | Reglas de los casos de uso y `DomainResult` | JUnit + `FakeWeatherRepository` |
+| Datos | Retrofit, serialización, interceptores y mapeo de errores (400/401/403/5xx, *timeout*, sin red, JSON inválido) | `MockWebServer` con respuestas reales del API |
+| Presentación | Estados de los ViewModels: *debounce*, cancelación, reintento | Turbine + tiempo virtual |
+| UI | Pantallas Compose: textos formateados, clicks y accesibilidad | Compose UI Test sobre Robolectric (JVM, sin emulador) |
 
-## 🚀 Requisitos para Compilar
-Para poder compilar y ejecutar el proyecto, necesitas lo siguiente:
+## 🚀 Ejecutar
 
-1. Android Studio: Se recomienda la última versión estable (por ejemplo, Iguana o superior).
-2. JDK: Versión 17 o superior.
-3. Api mínima es 21 (Android 5.0)
-4. API Key: La aplicación utiliza una API externa para obtener los datos del clima. Necesitarás obtener una API Key de WeatherAPI.com. Una vez obtenida, debes agregarla en el archivo local.properties de la siguiente manera:
+Requisitos: Android Studio reciente y JDK 17 o superior.
 
-```properties
-WEATHER_API_KEY="TU_API_KEY_AQUI"
+1. Crea una API key gratuita en [WeatherAPI.com](https://www.weatherapi.com/) y agrégala a
+   `local.properties` (no se versiona):
+
+   ```properties
+   WEATHER_API_KEY=tu_api_key
+   ```
+
+   También se lee de la variable de entorno `WEATHER_API_KEY` (útil en CI).
+
+2. Comandos principales:
+
+   ```bash
+   ./gradlew assembleDebug        # compila la app
+   ./gradlew test                 # tests de todas las capas (JVM)
+   ./gradlew lint spotlessCheck   # Android Lint + formato
+   ./gradlew spotlessApply        # formatea el código
+   ```
+
+Para firmar el release, agrega un `keystore.properties` en la raíz con `storeFile`, `storePassword`,
+`keyAlias` y `keyPassword`.
+
+## 📁 Estructura
+
+```text
+weather-b
+├── app/                    # Composition root (Application, MainActivity, NavHost, DI de configuración)
+├── build-logic/convention/ # Convention plugins de Gradle
+├── core/
+│   ├── data/               # remote/ (API, DTOs, interceptores), mapper/, error/, repository/, di/
+│   ├── designsystem/       # theme/, component/, icon/
+│   ├── domain/             # model/, error/, result/, repository/, usecase/
+│   ├── testing/            # Fakes y datos de prueba
+│   └── ui/                 # Mensajes de error
+├── feature/
+│   ├── detail/             # DetailScreen, DetailViewModel, model/, component/, navigation/
+│   └── search/             # SearchScreen, SearchViewModel, model/, component/, navigation/
+└── docs/                   # Arquitectura e imágenes
 ```
-
-El proyecto está configurado para leer esta clave desde el BuildConfig para mantenerla segura y fuera del control de versiones.
-    

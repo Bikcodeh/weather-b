@@ -1,17 +1,21 @@
+# Gradle
+.gradle/
+build/
+.kotlin/
+
+# Android Studio / IntelliJ
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+.navigation/
+
+# Local configuration & secrets (never commit)
 local.properties
 keystore.properties
-weather-app-keystore.jks
+*.jks
+*.keystore
+
+# OS
+.DS_Store

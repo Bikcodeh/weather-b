@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_search_title">Buscador del clima</string>
+    <string name="feature_search_field_placeholder">Escribe una ciudad</string>
+    <string name="feature_search_clear">Borrar búsqueda</string>
+    <string name="feature_search_no_results">Sin resultados</string>
+</resources>

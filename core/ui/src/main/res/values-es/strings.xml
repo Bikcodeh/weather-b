@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_ui_error_network">¡Ups! No hay conexión a internet. Revisa tu conexión e inténtalo de nuevo.</string>
+    <string name="core_ui_error_timeout">¡Ups! El servidor tardó demasiado en responder. Inténtalo de nuevo.</string>
+    <string name="core_ui_error_unauthorized">¡Ups! El servicio del clima rechazó la solicitud. Verifica que la API key sea válida y tenga cuota disponible.</string>
+    <string name="core_ui_error_not_found">¡Ups! No encontramos esa ubicación.</string>
+    <string name="core_ui_error_server">¡Ups! El servicio del clima tiene problemas. Inténtalo más tarde.</string>
+    <string name="core_ui_error_parsing">¡Ups! Recibimos datos inesperados del servicio del clima.</string>
+    <string name="core_ui_error_unknown">¡Ups! Algo salió mal. Inténtalo de nuevo.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_ui_error_network">Oops! No internet connection. Check your connection and try again.</string>
+    <string name="core_ui_error_timeout">Oops! The server took too long to respond. Please try again.</string>
+    <string name="core_ui_error_unauthorized">Oops! The weather service rejected the request. Check that the API key is valid and has quota left.</string>
+    <string name="core_ui_error_not_found">Oops! We couldn\'t find that location.</string>
+    <string name="core_ui_error_server">Oops! The weather service is having problems. Please try again later.</string>
+    <string name="core_ui_error_parsing">Oops! We received unexpected data from the weather service.</string>
+    <string name="core_ui_error_unknown">Oops! Something went wrong. Please try again.</string>
+</resources>

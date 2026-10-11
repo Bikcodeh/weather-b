@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_detail_title">Detail</string>
+    <string name="feature_detail_temperature" translatable="false">%1$d°</string>
+    <string name="feature_detail_feels_like">Feels like %1$d°</string>
+    <string name="feature_detail_high_low">High %1$d°, low %2$d°</string>
+    <string name="feature_detail_precipitation">Precipitation</string>
+    <string name="feature_detail_precipitation_value" translatable="false">%1$.1f mm</string>
+    <string name="feature_detail_humidity">Humidity</string>
+    <string name="feature_detail_humidity_value" translatable="false">%1$d%%</string>
+    <string name="feature_detail_wind">Wind speed</string>
+    <string name="feature_detail_wind_value" translatable="false">%1$d km/h</string>
+</resources>
